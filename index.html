@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Geometry Animation HTML + jQuery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<script src="terminal.js"></script>
+    <div class="container">
+        <div class="logo">
+			<a href="https://ao.arweave.dev/" target="_blank">
+            	<img src="https://cookbook_ao.g8way.io/ao_pictograph_darkmode.svg" alt="AO">
+			</a>
+        </div>
+        <div class="connect-box">
+			<h1>Connect to AOS Terminal <br> The hyper parallel computer is here.<br><h3>ArConnect Wallet</h3></h1>
+            <button type="button" id="connect" class="btn arconnect-btn">Connect</button>
+        </div>
+        <div id="wallet-info" class="wallet-info" style="display:none;">
+            <h2>Wallet Information</h2>
+            <p id="wallet-address"></p>
+            <button type="button" id="disconnect" class="btn disconnect-btn">Disconnect</button>
+        </div>
+        <div id="terminal-container" class="terminal-container" style="display:none;">
+            <iframe id="terminal" src="" frameborder="0"></iframe>
+        </div>
+        <div class="social-logos">
+            <a href="https://discord.gg/qWgGxJKwNJ" target="_blank">
+                <img src="https://cdn.iconscout.com/icon/free/png-512/free-discord-3691244-3073764.png?f=webp&w=256" alt="Discord">
+            </a>
+            <a href="https://x.com/aoTheComputer" target="_blank">
+                <img src="https://cdn.iconscout.com/icon/free/png-512/free-twitter-9420781-7651211.png?f=webp&w=256" alt="X">
+            </a>
+            <a href="https://github.com/permaweb/ao" target="_blank">
+                <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="Github">
+            </a>
+        </div>
+    </div>
+    <script>
+        // ArConnect integration JavaScript
+        document.getElementById('connect').addEventListener('click', async () => {
+            if (window.arweaveWallet) {
+                try {
+                    // Request connection to ArConnect
+                    await window.arweaveWallet.connect(["ACCESS_ADDRESS", "SIGN_TRANSACTION"]);
+                    console.log("ArConnect connected");
+
+                    // Get the wallet address
+                    const address = await window.arweaveWallet.getActiveAddress();
+                    document.getElementById('wallet-address').textContent = `Connected Wallet Address: ${address}`;
+
+                    // Show the wallet info and terminal iframe
+                    document.getElementById('wallet-info').style.display = 'block';
+                    document.getElementById('terminal-container').style.display = 'block';
+                    document.getElementById('terminal').src = "https://sh_ao.g8way.io/";
+                } catch (error) {
+                    console.error("Failed to connect to ArConnect", error);
+                    alert("Failed to connect to ArConnect. Please try again.");
+                }
+            } else {
+                alert("ArConnect wallet not installed. Please install it first.");
+            }
+        });
+
+        // Disconnect ArConnect
+        document.getElementById('disconnect').addEventListener('click', async () => {
+            if (window.arweaveWallet) {
+                try {
+                    await window.arweaveWallet.disconnect();
+                    console.log("ArConnect disconnected");
+
+                    // Hide the wallet info and terminal iframe
+                    document.getElementById('wallet-info').style.display = 'none';
+                    document.getElementById('terminal-container').style.display = 'none';
+                    document.getElementById('wallet-address').textContent = '';
+                } catch (error) {
+                    console.error("Failed to disconnect ArConnect", error);
+                    alert("Failed to disconnect ArConnect. Please try again.");
+                }
+            }
+        });
+
+        // Check if ArConnect is installed
+        if (!window.arweaveWallet) {
+            console.warn("ArConnect is not installed.");
+        }
+    </script>
+
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script src='https://salesportal.aptaracorp.com/PPDI/POC/js/geometry/geometryangle.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
